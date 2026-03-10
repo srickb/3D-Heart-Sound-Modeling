@@ -8,9 +8,9 @@ This file explains how the daily research log system reads input files and how t
 
 The generator reads only files for the current date in Asia/Seoul timezone.
 
-- `notes/daily_raw/YYYY-MM-DD.md`
-- `experiments/YYYY-MM-DD.json`
-- `project_context.json`
+- `Auto_Github/notes/daily_raw/YYYY-MM-DD.md`
+- `Auto_Github/experiments/YYYY-MM-DD.json`
+- `Auto_Github/project_context.json`
 
 The note markdown file is optional.
 If it exists, the script reads it as UTF-8, trims whitespace, ignores empty content, and uses non-empty lines as evidence.
@@ -28,14 +28,14 @@ It does not copy raw diffs into the log.
 
 When the day is meaningful, the script creates:
 
-- `daily_logs/YYYY-MM-DD.md`
-- `daily_logs/structured/YYYY-MM-DD.json`
+- `Auto_Github/daily_logs/YYYY-MM-DD.md`
+- `Auto_Github/daily_logs/structured/YYYY-MM-DD.json`
 
 If the day is not meaningful, the script exits successfully and creates nothing.
 
 ## How To Read The Markdown Log
 
-`daily_logs/YYYY-MM-DD.md` is the human-readable daily report.
+`Auto_Github/daily_logs/YYYY-MM-DD.md` is the human-readable daily report.
 
 - `One-line Summary`: a short summary of the day.
 - `Research Intent`: the most conservative statement of the day's purpose.
@@ -53,25 +53,25 @@ Use this markdown file when you want a quick human review of what happened that 
 
 ## How To Use The Structured JSON
 
-`daily_logs/structured/YYYY-MM-DD.json` is for machine-readable reuse.
+`Auto_Github/daily_logs/structured/YYYY-MM-DD.json` is for machine-readable reuse.
 
 - It includes evidence such as commit count, commit SHAs, note usage, and experiment usage.
 - It includes a Korean prompt and strict rules for later summarization.
-- It references `project_context.json` instead of copying the full project context every day.
+- It references `Auto_Github/project_context.json` instead of copying the full project context every day.
 
 Use this JSON when you want to paste a precise daily record into ChatGPT web or another manual analysis workflow.
 
 ## Typical Workflow
 
-1. Write notes in `notes/daily_raw/YYYY-MM-DD.md` if you have research thoughts, problems, or next steps.
-2. Save experiment metadata in `experiments/YYYY-MM-DD.json` if you ran an experiment.
+1. Write notes in `Auto_Github/notes/daily_raw/YYYY-MM-DD.md` if you have research thoughts, problems, or next steps.
+2. Save experiment metadata in `Auto_Github/experiments/YYYY-MM-DD.json` if you ran an experiment.
 3. Commit research-related code changes as usual.
-4. Run `python scripts/generate_daily_log.py` locally or let GitHub Actions run it.
-5. Open `daily_logs/YYYY-MM-DD.md` to review the human-readable log.
-6. If needed, open `daily_logs/structured/YYYY-MM-DD.json` and paste it into ChatGPT web for a stricter narrative summary.
+4. Run `python Auto_Github/scripts/generate_daily_log.py` locally or let GitHub Actions run it.
+5. Open `Auto_Github/daily_logs/YYYY-MM-DD.md` to review the human-readable log.
+6. If needed, open `Auto_Github/daily_logs/structured/YYYY-MM-DD.json` and paste it into ChatGPT web for a stricter narrative summary.
 
 ## Notes
 
 - The system is conservative by design. Weak evidence is skipped rather than inflated.
 - If you want better daily logs, write clearer notes and experiment summaries on the same date.
-- Update `project_context.json` when the stable project goal or environment changes.
+- Update `Auto_Github/project_context.json` when the stable project goal or environment changes.

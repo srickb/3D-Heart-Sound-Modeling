@@ -18,12 +18,13 @@ except ImportError:  # pragma: no cover
     ZoneInfo = None
 
 
-ROOT = Path(__file__).resolve().parents[1]
-PROJECT_CONTEXT_PATH = ROOT / "project_context.json"
-DAILY_LOG_DIR = ROOT / "daily_logs"
+AUTOMATION_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = AUTOMATION_ROOT.parent
+PROJECT_CONTEXT_PATH = AUTOMATION_ROOT / "project_context.json"
+DAILY_LOG_DIR = AUTOMATION_ROOT / "daily_logs"
 STRUCTURED_LOG_DIR = DAILY_LOG_DIR / "structured"
-NOTE_DIR = ROOT / "notes" / "daily_raw"
-EXPERIMENT_DIR = ROOT / "experiments"
+NOTE_DIR = AUTOMATION_ROOT / "notes" / "daily_raw"
+EXPERIMENT_DIR = AUTOMATION_ROOT / "experiments"
 KST = ZoneInfo("Asia/Seoul") if ZoneInfo else timezone(timedelta(hours=9))
 AUTO_COMMIT_MESSAGE = "chore: update daily research log"
 LLM_PROMPT = (
@@ -115,7 +116,7 @@ def run_git_command(args: list[str]) -> str | None:
     try:
         completed = subprocess.run(
             ["git", *args],
-            cwd=ROOT,
+            cwd=REPO_ROOT,
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -189,7 +190,7 @@ def read_optional_note(target_date: str) -> tuple[str, str]:
     if not note_path.exists():
         return "", ""
     content = note_path.read_text(encoding="utf-8").strip()
-    return content, note_path.relative_to(ROOT).as_posix()
+    return content, note_path.relative_to(REPO_ROOT).as_posix()
 
 
 def _has_meaningful_experiment_content(data: Any) -> bool:
@@ -206,7 +207,7 @@ def _has_meaningful_experiment_content(data: Any) -> bool:
 
 def read_optional_experiment(target_date: str) -> ExperimentReadResult:
     experiment_path = EXPERIMENT_DIR / f"{target_date}.json"
-    relative_path = experiment_path.relative_to(ROOT).as_posix()
+    relative_path = experiment_path.relative_to(REPO_ROOT).as_posix()
     if not experiment_path.exists():
         return ExperimentReadResult(data=None, used=False, status="missing", path="")
 
@@ -707,8 +708,8 @@ def main() -> int:
     markdown_path = DAILY_LOG_DIR / f"{target_date}.md"
     write_json(structured_path, structured_payload)
     write_markdown(markdown_path, markdown_content)
-    print(f"[ok] Wrote {structured_path.relative_to(ROOT).as_posix()}")
-    print(f"[ok] Wrote {markdown_path.relative_to(ROOT).as_posix()}")
+    print(f"[ok] Wrote {structured_path.relative_to(REPO_ROOT).as_posix()}")
+    print(f"[ok] Wrote {markdown_path.relative_to(REPO_ROOT).as_posix()}")
     print(f"[info] Auto-commit message for workflow: {AUTO_COMMIT_MESSAGE}")
     return 0
 
