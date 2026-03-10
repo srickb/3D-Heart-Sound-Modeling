@@ -1,0 +1,23 @@
+# data
+data/
+dataset/
+*.wav
+*.mp3
+
+# results
+output/
+results/
+
+# python
+__pycache__/
+*.pyc
+
+# env
+env/
+venv/
+.venv/
+
+# models
+*.pt
+*.pth
+*.h5
